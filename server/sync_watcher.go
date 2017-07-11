@@ -272,13 +272,8 @@ func (watcher *SyncWatcher) processSyncWatch(ctx context.Context, path string) e
 				if response.Err != nil {
 					return response.Err
 				}
+				watcher.watchExtensionHandler(response)
 
-				watcher.queue.Add(job.NewJob(
-					func() {
-						resp := response
-						watcher.watchExtensionHandler(resp)
-					},
-				))
 				err := watcher.storeRevision(path, response.Revision)
 				if err != nil {
 					return err
